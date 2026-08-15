@@ -29,7 +29,22 @@ module "nat_instance" {
   iam_instance_profile_name  = module.iam.instance_profile_name
 }
 
+resource "aws_route" "private_to_nat" {
+  route_table_id         = module.vpc.private_route_table_id
+  destination_cidr_block = "0.0.0.0/0"
+  network_interface_id   = module.nat_instance.primary_network_interface_id
+}
+
 module "iam" {
   source      = "../../modules/iam"
   name_prefix = "spoke"
+}
+
+module "test_host" {
+  source                     = "../../modules/test-host"
+  vpc_id                     = module.vpc.vpc_id
+  private_subnet_id          = module.vpc.private_subnet_id
+  peer_vpc_cidr              = "10.0.0.0/16"
+  iam_instance_profile_name  = module.iam.instance_profile_name
+  name_prefix                = "spoke"
 }

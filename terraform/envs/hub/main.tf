@@ -39,3 +39,12 @@ module "iam" {
   source      = "../../modules/iam"
   name_prefix = "hub"
 }
+
+module "test_host" {
+  source                     = "../../modules/test-host"
+  vpc_id                     = module.vpc.vpc_id
+  private_subnet_id          = module.vpc.private_subnet_id
+  peer_vpc_cidr              = "10.1.0.0/16"
+  iam_instance_profile_name  = module.iam.instance_profile_name
+  name_prefix                = "hub"
+}

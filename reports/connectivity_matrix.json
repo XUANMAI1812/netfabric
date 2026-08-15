@@ -1,0 +1,58 @@
+{
+  "test_run": "2026-08-15T18:00:26.237581",
+  "total_cases": 5,
+  "passed": 5,
+  "failed": 0,
+  "results": [
+    {
+      "src": "hub-private",
+      "dst": "spoke-private",
+      "port": null,
+      "expect_allow": true,
+      "reason": "Ping t\u1edbi private IP th\u1eadt c\u1ee7a spoke qua WireGuard tunnel ph\u1ea3i th\u00e0nh c\u00f4ng",
+      "timestamp": "2026-08-15T17:59:49.749467",
+      "actual_result": "allow",
+      "pass": true
+    },
+    {
+      "src": "hub-private",
+      "dst": "spoke-backbone",
+      "port": null,
+      "expect_allow": true,
+      "reason": "Ping t\u1edbi backbone IP (10.100.0.2) c\u1ee7a spoke qua tunnel ph\u1ea3i th\u00e0nh c\u00f4ng",
+      "timestamp": "2026-08-15T17:59:56.104257",
+      "actual_result": "allow",
+      "pass": true
+    },
+    {
+      "src": "hub-public",
+      "dst": "hub-private",
+      "port": 22,
+      "expect_allow": false,
+      "reason": "Kh\u00f4ng SSH tr\u1ef1c ti\u1ebfp t\u1eeb public v\u00e0o private \u2014 SG test-host kh\u00f4ng m\u1edf port 22",
+      "timestamp": "2026-08-15T18:00:08.040095",
+      "actual_result": "deny",
+      "pass": true
+    },
+    {
+      "src": "hub-private",
+      "dst": "spoke-private",
+      "port": 5201,
+      "expect_allow": true,
+      "reason": "SG test-host m\u1edf TCP 5201 (iperf3) cho CIDR VPC b\u00ean kia \u2014 Ph\u1ea7n 5.2",
+      "timestamp": "2026-08-15T18:00:17.287964",
+      "actual_result": "allow",
+      "pass": true
+    },
+    {
+      "src": "spoke-private",
+      "dst": "hub-private",
+      "port": 5201,
+      "expect_allow": true,
+      "reason": "\u0110\u1ed1i x\u1ee9ng v\u1edbi case tr\u00ean \u2014 ki\u1ec3m tra c\u1ea3 2 chi\u1ec1u",
+      "timestamp": "2026-08-15T18:00:26.237442",
+      "actual_result": "allow",
+      "pass": true
+    }
+  ]
+}

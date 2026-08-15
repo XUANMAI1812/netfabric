@@ -1,0 +1,10 @@
+{
+  "test_run": "2026-08-15T18:04:31.372934",
+  "src": "hub-private-testhost",
+  "dst": "spoke-private-testhost",
+  "dst_ip": "10.1.2.145",
+  "duration_s": 10,
+  "sent_mbps": 208.39,
+  "received_mbps": 205.65,
+  "retransmits": 329
+}

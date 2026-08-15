@@ -92,6 +92,17 @@ resource "aws_network_acl_rule" "public_in_udp_ephemeral_return" {
 }
 
 # outbound pub nacl
+resource "aws_network_acl_rule" "public_in_from_private_subnet" {
+  network_acl_id = aws_network_acl.public.id
+  rule_number    = 90
+  egress         = false
+  protocol       = "-1"
+  rule_action    = "allow"
+  cidr_block     = var.private_subnet_cidr
+  from_port      = 0
+  to_port        = 0
+}
+
 resource "aws_network_acl_rule" "public_out_all" {
   network_acl_id = aws_network_acl.public.id
   rule_number    = 100
@@ -137,6 +148,17 @@ resource "aws_network_acl_rule" "private_in_from_peer_vpc" {
   to_port        = 0
 }
 
+resource "aws_network_acl_rule" "private_in_from_backbone" {
+  network_acl_id = aws_network_acl.private.id
+  rule_number    = 111
+  egress         = false
+  protocol       = "-1"
+  rule_action    = "allow"
+  cidr_block     = "10.100.0.0/24"
+  from_port      = 0
+  to_port        = 0
+}
+
 resource "aws_network_acl_rule" "private_in_ephemeral_return" {
   network_acl_id = aws_network_acl.private.id
   rule_number    = 120
@@ -171,6 +193,17 @@ resource "aws_network_acl_rule" "private_out_to_peer_vpc" {
   to_port        = 0
 }
 
+resource "aws_network_acl_rule" "private_out_to_backbone" {
+  network_acl_id = aws_network_acl.private.id
+  rule_number    = 111
+  egress         = true
+  protocol       = "-1"
+  rule_action    = "allow"
+  cidr_block     = "10.100.0.0/24"
+  from_port      = 0
+  to_port        = 0
+}
+
 resource "aws_network_acl_rule" "private_out_https" {
   network_acl_id = aws_network_acl.private.id
   rule_number    = 120
@@ -197,6 +230,14 @@ resource "aws_security_group" "nat_bastion" {
     to_port     = 51820
     protocol    = "udp"
     cidr_blocks = [var.peer_public_ip != null ? "${var.peer_public_ip}/32" : "0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "Traffic from private subnet so that NAT instance can forward to internet"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = [var.private_subnet_cidr]
   }
 
   egress {
