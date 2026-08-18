@@ -10,7 +10,7 @@ Note on naming: the Terraform environments are called `hub` and `spoke`. With ex
 
 ## Architecture
 
-!\[NetFabric architecture](architecture.drawio.png)
+![NetFabric architecture](architecture.drawio.png)
 
 Each VPC has one public and one private subnet, its own route table, NACL and security group. The NAT instance in the public subnet does double duty as the WireGuard endpoint and as the administrative access point (via SSM, not SSH).
 
